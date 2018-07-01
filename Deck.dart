@@ -1,15 +1,14 @@
 import 'dart:math';
-
+import 'Card.dart';
 class Deck
 {
   List<Card> list = new List();
 
   Deck()
   {
-    initCard("Hearts");
-    initCard("Diamonds");
-    initCard("Spades");
-    initCard("clubs");
+   var suits = ["Diamonds","Spades","clubs","Hearts"];
+   for(String suit in suits)
+     initCards(suit);
   }
   initCards(String suitName)
   {
@@ -19,12 +18,11 @@ class Deck
         list.add(new Card(allRanks.elementAt(i),suitName));
       }
   }
-  Card findCard(String suit,String rank)
+  Card findCard(String rank,String suit)
   {
 
     for(Card c in list){
-
-      if(c.getSuit==suit&&c.getRank==rank)
+      if(c.getSuit()==suit&&c.getRank()==rank)
       {
         return list.elementAt(list.indexOf(c));
       }
@@ -35,19 +33,20 @@ class Deck
   {
     this.list.shuffle();
   }
-  List<Card> deal(int num)
+  Deck deal(int num)
   {
-    List<Card> tempDeck = new List();
+    Deck tempDeck = new Deck();
+    tempDeck.list.removeWhere((Card)=>true);
 
     for(int i=0;i<num;i++)
-        tempDeck.add(list.elementAt(i));
+        tempDeck.list.add(this.list.removeAt(i));
 
     return tempDeck;
   }
   void printCards()
   {
     for(Card c in list)
-      print("\n",c.suit,c.rank);
+      print(c.rank+" of "+c.suit);
   }
   List<Card> findCardWithSuit(String suit)
   {
@@ -59,9 +58,10 @@ class Deck
       }
       return tempList;
   }
-   String remove(String suit,String rank)
+   String remove(String rank,String suit)
   {
-    Card rem = findCard(suit,rank);
+
+    Card rem = findCard(rank,suit);
     if(rem!=null)
     {
       list.remove(rem);
